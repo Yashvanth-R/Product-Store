@@ -28,11 +28,11 @@ const Navbar = () => {
                     fontWeight={"bold"}
                     textTransform={"uppercase"}
                     textAlign={"center"}
-                    bgGradient={"linear(to-r, cyan.400, blue.500)"}
+                    bgGradient={"linear(to-r, green.400, red.500)"}
                     bgClip={"text"}
                     mb={{ base: 2, sm: 0 }}
                 >
-                    <Link to={"/"}>Product Store 🛒</Link>
+                    <Link to={"/"}>Products Store 🛒</Link>
                 </Text>
 
                 <HStack
