@@ -16,3 +16,34 @@ A full-featured Products Store demo built with the MERN stack: MongoDB, Express.
 🌍 Deployment-ready for services like Vercel, Render, or Railway
 
 🧩 Easily extensible for authentication, cart, or admin features
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+## Environment Setup
+Create a .env file in the root directory:
+
+.env file
+```
+MONGO_URI=your_mongodb_connection_string
+PORT=3000
+```
+📥 Installation
+
+# Install dependencies
+```
+npm install
+```
+
+⚙️ Run the App Locally
+
+# Build React App
+```
+npm run build
+```
+
+# Start the server
+```
+npm start
+```
+The app will start on http://localhost:3000
+
