@@ -10,9 +10,15 @@ const productSchema = new mongoose.Schema({
         required: true,
     },
     image: {
-        type: String,
-        required: true,
-    },
+    type: String,
+    required: true,
+    validate: {
+        validator: function(v) {
+            return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(v);
+        },
+        message: props => `${props.value} is not a valid image URL!`
+    }
+},
 }, {
     timestamps: true, // Automatically manage createdAt and updatedAt fields
 });
