@@ -66,9 +66,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         }
     };
 
-    const handleUpdateProduct = async (pid?: string, updatedProduct?: Product) => {
+        const handleUpdateProduct = async (pid?: string, updatedProduct?: Product) => {
         if (!pid || !updatedProduct) return;
-        const { success, message } = await updateProduct(pid, updatedProduct);
+        const productToSend = {
+            ...updatedProduct,
+            price: Number(updatedProduct.price), // Ensure price is a number
+        };
+        const { success, message } = await updateProduct(pid, productToSend);
         onClose();
         if (!success) {
             toast({
@@ -98,7 +102,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             _hover={{ transform: "translateY(-5px)", shadow: "xl" }}
             bg={bg}
         >
-            <Image src={product.image} alt={product.name} h={48} w='full' objectFit='cover' />
+            <Image
+                src={product.image}
+                alt={product.name}
+                h={64}
+                w="full"
+                maxH={64}
+                objectFit="contain"
+                objectPosition="center"
+                borderTopRadius="lg"
+                />
 
             <Box p={4}>
                 <Heading as='h3' size='md' mb={2}>
