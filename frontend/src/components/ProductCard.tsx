@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { useProductStore } from "../store/product";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 type Product = {
     _id?: string;
@@ -123,14 +124,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </Text>
 
                 <HStack spacing={2}>
+                <motion.div whileHover={{ scale: 1.15 }}>
                     <IconButton aria-label="Edit" icon={<EditIcon />} onClick={onOpen} colorScheme='blue' />
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.15 }}>
                     <IconButton
                         aria-label="Delete"
                         icon={<DeleteIcon />}
                         onClick={() => handleDeleteProduct(product._id)}
                         colorScheme='red'
                     />
-                </HStack>
+                </motion.div>
+            </HStack>
             </Box>
 
             <Modal isOpen={isOpen} onClose={onClose}>

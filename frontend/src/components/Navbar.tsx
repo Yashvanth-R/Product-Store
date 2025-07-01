@@ -3,12 +3,19 @@ import { Link } from "react-router-dom";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
+import { motion } from "framer-motion";
+
+const MotionContainer = motion(Container);
 
 const Navbar = () => {
     const { colorMode, toggleColorMode } = useColorMode();
 
-    return (
-        <Container
+
+   return (
+        <MotionContainer
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
             maxW={{ base: "100%", md: "100%" }}
             px={{ base: 10, sm: 4, md: 8 }}
             py={{ base: 4, sm: 0 }}
@@ -59,7 +66,7 @@ const Navbar = () => {
                     </Button>
                 </HStack>
             </Flex>
-        </Container>
+        </MotionContainer>
     );
 };
 export default Navbar;
