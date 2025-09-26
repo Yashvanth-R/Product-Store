@@ -27,7 +27,6 @@ Create a .env file in the root directory:
 MONGO_URI=your_mongodb_connection_string
 PORT=3000
 ```
-📥 Installation
 
 # Install dependencies
 ```
