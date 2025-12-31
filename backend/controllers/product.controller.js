@@ -12,15 +12,27 @@ export const getProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-    const product = req.body;
-
-    if(!product.name || !product.price || !product.image) {
-        return res.status(400).json({ success:false, message: 'Please provide all the fields' });
-    }
-
-    const newProduct = new Product(product);
-
     try {
+        const { name, price } = req.body;
+        
+        // Check if all required fields are provided
+        if (!name || !price) {
+            return res.status(400).json({ success: false, message: 'Please provide name and price' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'Please upload an image' });
+        }
+
+        // Create product object with file path
+        const product = {
+            name,
+            price: Number(price),
+            image: `/uploads/${req.file.filename}` // Store the file path
+        };
+
+        const newProduct = new Product(product);
+
         await newProduct.save();
         res.status(201).json({ success: true, data: newProduct });
     }

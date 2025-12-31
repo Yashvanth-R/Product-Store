@@ -37,17 +37,35 @@ type ProductCardProps = {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const [updatedProduct, setUpdatedProduct] = useState<Product>(product);
+    
+    // Construct image URL - handle both local uploads and external URLs
+    const getImageUrl = (imagePath: string): string => {
+        if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+            return imagePath; // External URL
+        }
+        if (imagePath.startsWith('/uploads/')) {
+            return imagePath; // Local file - use proxied path through vite dev server
+        }
+        return imagePath; // Fallback
+    };
+    
+    const [imageSrc, setImageSrc] = useState<string>(getImageUrl(product.image));
 
     const textColor = useColorModeValue("gray.600", "gray.200");
     const bg = useColorModeValue("white", "gray.800");
 
-    const { deleteProduct, updateProduct } = useProductStore();
+    const { deleteProduct: deleteProductFromStore, updateProduct } = useProductStore();
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    // Handle image load errors with fallback
+    const handleImageError = () => {
+        setImageSrc("https://via.placeholder.com/300x300?text=No+Image");
+    };
+
     const handleDeleteProduct = async (pid?: string) => {
         if (!pid) return;
-        const { success, message } = await deleteProduct(pid);
+        const { success, message } = await deleteProductFromStore(pid);
         if (!success) {
             toast({
                 title: "Error",
@@ -104,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             bg={bg}
         >
             <Image
-                src={product.image}
+                src={imageSrc}
                 alt={product.name}
                 h={64}
                 w="full"
@@ -112,6 +130,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 objectFit="contain"
                 objectPosition="center"
                 borderTopRadius="lg"
+                onError={handleImageError}
                 />
 
             <Box p={4}>

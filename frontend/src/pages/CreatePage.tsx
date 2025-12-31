@@ -6,18 +6,43 @@ const CreatePage = () => {
 	const [newProduct, setNewProduct] = useState({
 		name: "",
 		price: "",
-		image: "",
 	});
+	const [imageFile, setImageFile] = useState<File | null>(null);
+	const [imagePreview, setImagePreview] = useState<string>("");
 	const toast = useToast();
 
 	const { createProduct } = useProductStore();
 
+	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			setImageFile(file);
+			// Create preview
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setImagePreview(reader.result as string);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+
 	const handleAddProduct = async () => {
-  const productToSend = {
-    ...newProduct,
-    price: Number(newProduct.price), // Ensure price is a number
-  };
-  const { success, message } = await createProduct(productToSend);
+		if (!imageFile) {
+			toast({
+				title: "Error",
+				description: "Please select an image",
+				status: "error",
+				isClosable: true,
+			});
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append("name", newProduct.name);
+		formData.append("price", newProduct.price);
+		formData.append("image", imageFile);
+
+		const { success, message } = await createProduct(formData);
 		if (!success) {
 			toast({
 				title: "Error",
@@ -33,7 +58,9 @@ const CreatePage = () => {
 				isClosable: true,
 			});
 		}
-		setNewProduct({ name: "", price: "", image: "" });
+		setNewProduct({ name: "", price: "" });
+		setImageFile(null);
+		setImagePreview("");
 	};
 
 	return (
@@ -59,11 +86,15 @@ const CreatePage = () => {
 							onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
 						/>
 						<Input
-							placeholder='Image URL'
-							name='image'
-							value={newProduct.image}
-							onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+							type='file'
+							accept='image/*'
+							onChange={handleImageChange}
 						/>
+						{imagePreview && (
+							<Box w="full" maxH="200px" overflow="hidden" rounded="md">
+								<img src={imagePreview} alt="Preview" style={{ width: "100%", objectFit: "cover" }} />
+							</Box>
+						)}
 
 						<Button colorScheme='blue' onClick={handleAddProduct} w='full'>
 							Add Product
